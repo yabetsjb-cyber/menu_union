@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Union cocktail Bar and Restaurant - Menu</title> <!--Hotel Name Here-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2b5329;
+            --accent-color: #e67e22;
+            --bg-color: #fcfaf7;
+            --text-color: #333333;
+            --muted-text: #666666;
+            --white: #ffffff;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, rgba(43, 83, 41, 0.15), rgba(230, 126, 34, 0.15));
+            min-height: 100vh;
+            color: var(--text-color);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 1.5rem 1rem;
+            background-color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            position: relative;
+            z-index: 10;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .header-layout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2.5rem;
+        }
+
+        .header-logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-logo-image {
+            height: 220px;
+            /* Increased height so it stands out */
+            width: auto;
+            object-fit: contain;
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .horizontal-logo {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 12px;
+            margin: 0;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .horizontal-logo span.primary {
+            color: var(--primary-color);
+            font-weight: 900;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logo-top,
+        .logo-bottom {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .logo-top {
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+            font-weight: 700;
+        }
+
+        .logo-bottom {
+            font-size: 1.1rem;
+            margin-top: 0.2rem;
+            letter-spacing: 4px;
+            font-weight: 700;
+        }
+
+        /* Slider Section */
+        .slider-wrapper {
+            width: calc(100% - 2rem);
+            max-width: 800px;
+            margin: 1.5rem auto 1rem;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            position: relative;
+            background: var(--white);
+        }
+
+        .slider-track {
+            display: flex;
+            width: 100%;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 300px;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media (max-width: 480px) {
+            .slider-wrapper {
+                margin: 1rem auto 0.5rem;
+            }
+
+            .slide {
+                height: 200px;
+            }
+        }
+
+        /* Sticky Navigation */
+        .category-nav {
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            padding: 0.5rem 0;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: flex-start;
+            list-style: none;
+            padding: 0 1rem;
+            gap: 0.5rem;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x;
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .nav-links::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+            font-family: inherit;
+            font-weight: 600;
+            color: var(--muted-text);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .nav-btn.active {
+            color: var(--accent-color);
+        }
+
+        .nav-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 2px;
+            background-color: var(--accent-color);
+        }
+
+
+        /* Menu Content */
+        .menu-container {
+            padding: 1.25rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            min-height: 60vh;
+        }
+
+        .category-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--primary-color);
+            position: relative;
+        }
+
+        .category-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: var(--accent-color);
+            margin: 0.5rem auto 0;
+        }
+
+        .menu-items-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .menu-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .menu-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+            flex-shrink: 0;
+            box-shadow: var(--shadow);
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.3rem;
+        }
+
+        .item-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .item-price {
+            display: flex;
+            align-items: baseline;
+            color: var(--accent-color);
+            margin-left: 1rem;
+            white-space: nowrap;
+            background: color-mix(in srgb, var(--accent-color) 10%, transparent);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px color-mix(in srgb, var(--accent-color) 15%, transparent);
+            border: 1px solid color-mix(in srgb, var(--accent-color) 20%, transparent);
+        }
+
+        .price-amount {
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .price-currency {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 3px;
+            opacity: 0.9;
+        }
+
+        .item-description {
+            font-size: 0.8rem;
+            color: var(--muted-text);
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 1.5rem 1rem;
+            text-align: center;
+        }
+
+        .footer p {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+
+        .disclaimer {
+            font-style: italic;
+            margin-top: 1rem;
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 480px) {
+            .hero {
+                padding: 1rem 1rem;
+            }
+
+            .header-layout {
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .header-logo-container {
+                justify-content: center;
+            }
+
+            .header-logo-image {
+                height: 100px;
+                /* Kept large but scaled for row layout */
+                width: auto;
+            }
+
+            .header-content {
+                align-items: center;
+                text-align: center;
+            }
+
+            .horizontal-logo {
+                gap: 8px;
+            }
+
+            .horizontal-logo span.primary {
+                font-size: 1.8rem;
+            }
+
+            .logo-top,
+            .logo-bottom {
+                font-size: 0.9rem;
+            }
+
+            .category-nav {
+                justify-content: flex-start;
+            }
+
+            .nav-links {
+                justify-content: flex-start;
+            }
+
+            .menu-container {
+                padding: 1rem 0.75rem;
+            }
+
+            .item-name {
+                font-size: 1rem;
+            }
+
+            .nav-btn {
+                padding: 0.4rem 0.6rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="hero">
+        <div class="header-layout">
+            <div class="header-logo-container">
+                <img src="./logo.jpg" alt="Union Logo" class="header-logo-image">
+            </div>
+            <div class="header-content">
+                <div class="logo-top">The</div>
+                <h1 class="horizontal-logo">
+                    <span class="word">
+                        <span class="primary">Union</span>
+                    </span>
+                    <span class="word">
+                        <span class="primary">Menu</span>
+                    </span>
+                </h1>
+                <div class="logo-bottom">Chart</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="slider-wrapper">
+        <div class="slider-track" id="slider-track">
+            <div class="slide"><img
+                    src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop"
+                    alt="Slider Image 1"></div>
+            <div class="slide"><img
+                    src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop"
+                    alt="Slider Image 2"></div>
+            <div class="slide"><img
+                    src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?q=80&w=800&auto=format&fit=crop"
+                    alt="Slider Image 3"></div>
+            <div class="slide"><img
+                    src="https://images.unsplash.com/photo-1493770348161-369560ae357d?q=80&w=800&auto=format&fit=crop"
+                    alt="Slider Image 4"></div>
+            <div class="slide"><img
+                    src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?q=80&w=800&auto=format&fit=crop"
+                    alt="Slider Image 5"></div>
+            <div class="slide"><img
+                    src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=crop"
+                    alt="Slider Image 6"></div>
+        </div>
+    </div>
+
+    <nav class="category-nav" id="category-nav">
+        <ul class="nav-links">
+            <li><button class="nav-btn active" data-category="starters">Starters</button></li>
+            <li><button class="nav-btn" data-category="main_course">Main Course</button></li>
+            <li><button class="nav-btn" data-category="pasta">Pasta</button></li>
+            <li><button class="nav-btn" data-category="continental">Continental Specialities</button></li>
+            <li><button class="nav-btn" data-category="fasting">Fasting</button></li>
+            <li><button class="nav-btn" data-category="snacks">Snacks</button></li>
+            <li><button class="nav-btn" data-category="desserts">Desserts</button></li>
+            <li><button class="nav-btn" data-category="drinks">Drinks</button></li>
+        </ul>
+    </nav>
+
+    <main class="menu-container">
+        <h2 id="category-title" class="category-title"></h2>
+        <div id="menu-items" class="menu-items-grid">
+            <!-- Menu items will be injected here -->
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>All prices are subject to 10% service charge and 15% VAT </p>
+        <p>&copy; Union cocktail Bar and Restaurant. All rights reserved.</p> <!--This is there brand-->
+
+    </footer>
+
+    <script>
+        const menuData = {
+            starters: [
+                { name: "Grilled Chicken and Avocado Salad", description: "Juicy grilled chicken breast served over a bed of crisp lettuce, ripe avocados, juicy tomatoes, and red onions. Drizzled with a tangy vinaigrette. ", price: "1186 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnHA4ogbM-7Qbv5SJy8k5DgQQuADxcPYkgMw&s" },
+                { name: "Fish Katsu Salad", description: "Golden-fried crispy fish fillets served with fragrant rice and a ref reshing side salad. A  perfect blend of textures and flavors.  ", price: "791 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnHA4ogbM-7Qbv5SJy8k5DgQQuADxcPYkgMw&s" },
+                { name: "Shrimp Tempura Salad", description: "ender shrimp, lightly battered and deep-fried to c rispy perfection, served with  rice cakes and a creamy avocado salad.", price: "2185 Birr", image: "https://assets.tmecosys.com/image/upload/t_web_rdp_recipe_584x480_1_5x/img/recipe/ras/Assets/6be0c764b24c6ca78816be09f3e13b0e/Derivates/2239be9914b96001f0493bacfe0cd247d8470011.jpg" },
+                { name: "Garden Salad", description: "A vibrant mix of crisp lettuce, crunchy carrots, refreshing cucumber, juicy tomato es, red  onions, and spicy chili peppers, all tossed in a tangy vinaigrette", price: "711 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdRsvG2vrBzCeorP6s1my9Mw_G71vcX6lsvA&s" },
+                { name: "Tuna Salad", description: "Diced tuna, crisp lettuce, juicy tomatoes, red onio ns, refreshing cucumbers, and colorful bell  peppers, topped with toasted croutons and a zesty lemon-olive oil dressing ", price: "1028 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJbmBfSuxmpVSHbJFLEBeTpCOz8u2PeCx_Pw&s" },
+                { name: "Creamy Chicken Soup", description: "A rich and creamy soup filled with tender chicken, croutons, and a drizzle of  olive oil.", price: "791 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMl7JCO0rrt1x-lxV7gdSnN_ZxtUyn6fRRgA&s" },
+                { name: "Beef and Vegetable Soup", description: "A hearty and flavorful soup with tender beef, mixed  vegetables, and a savory  broth.", price: "932 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsonsquky55s1Zy-dXv3te04uKv9m8ex9nSA&s" },
+                { name: "Vegetable  Soup", description: "A light and refreshing soup with a medley of seasonal vegetables and tomatoes, simmered to perfection", price: "442 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIQH49waX_-KXhT09Z5dF19nv292n22KbwZQ&s" }
+            ],
+            main_course: [
+                { name: "Steak and Mash", description: "A  juicy,  tender  steak,  served  with  creamy  mashed  potatoes  and  a  side  of  sauted  vegetables, all topped with a rich, spiced butter sauce.", price: "1343 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF9QfUKP-PZO9VUzq3hplFIUuDU_b4_lXZ7A&s" },
+                { name: "Loin of Goat", description: "A flavorful grilled goat loin, served with creamy potato gratin and a tangy mustard and mint sabayon sauce.", price: "1976 Birr", image: "https://images.squarespace-cdn.com/content/v1/563931ece4b0128bf411fddb/1741675796944-IMH1ZRDX7Z61TDDY1KPX/GOAT%2BBANNER%2BPIC.jpg?format=1000w" },
+                { name: "Mixed Grill Platter", description: "A hearty platter featuring grilled tenderloin beef, boneless chicken, white fis h, and beef  sausages, served with our signature house potatoes and a rich, herbed Béarnaise sauce.", price: "2134 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9mMaBVwl1cLy20_q9tYIkfcH2tfT2AsXJTQ&s" },
+                { name: "Cheesy Chicken on Rice", description: "  A juicy, marinated chicken breast, topped with melted cheese and served wi th  sautéed Swiss chard, mushrooms, and herbed steamed rice. ", price: "1344 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9_7Yvrs9VPp0GZlqOt2tNSuIhByDm9Tz-wQ&s" },
+                { name: "Country Fried Chicken", description: "A crispy, golden-brown, breaded chicken breast, deep-fried to  perfection. Served with  crispy French fries and a tangy aioli dipping sauce. ", price: "1185 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-x-DVd6tvEn9elPW30iMYk1iOmoDakWnMdA&s" },
+                { name: "Butter Chicken", description: "Tender, tandoori-roasted chicken cubes, simmered in a rich  and creamy tikka masala sauce.  Served with fragrant fried rice, soft paratha, and a refreshing chutney.", price: "1344 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTY53Zww8_j72B0sOb6m4o4fOMO0eDtsvvwQ&s" },
+                { name: "Grilled Salmon", description: "A succulent piece of Norwegian salmon, grilled to perfection, served with creamy mashed  potatoes, sautéed spinach, and a rich Béarnaise sauce.", price: "4280 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZaxQOQD7J0g7JxSoZ7-IXzqrRAXlMQHwHpA&s" },
+                { name: "Grilled  White  Fish", description: "A  delicate  grilled  pangasius  fish  fillet,  served  with  fragrant  fried   rice  and  sautéed  vegetables.", price: "1976 Birr", image: "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2012/6/20/1/QF0205_Grilled-White-Fish-with-Chermoula-Recipe_s4x3.jpg.rend.hgtvcom.1280.1280.suffix/1382541459109.webp" },
+                { name: "Fish and Mash ", description: "A crispy, shallow-fried pangasius fish fillet, served with c reamy mashed potatoes and a fresh  side salad", price: "1400 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAymTK9DX9kbHseDEKJcSDyRCPeIkqcxNzyw&s" },
+                { name: "Fish Crispers ", description: "Crispy,  golden-brown  fish  fillets,  served  with  crispy  French  fries  and  a  tangy  aioli  dipping  sauce. ", price: "1185 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMdeNs77yndqqj5Tst830pNTE0xwxQ6g0DRg&s" },
+
+            ],
+            pasta: [
+                { name: "Creamy Chicken Alfredo", description: "Your choice of pasta tossed in a rich and creamy Alfredo sauce, with tender  pieces of chicken and a sprinkle of Parmesan cheese.", price: "1180 Birr", image: "https://www.recipetineats.com/tachyon/2017/03/One-Pot-Chicken-Alfredo-2.jpg" },
+                { name: "Cajun Chicken Pasta", description: "Your choice of pasta tossed in a spicy Cajun sauce,  with tender pieces of chicken  and a sprinkle of Parmesan cheese.", price: "1180 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhfkiJOfvGDy_Ds2N3JKWYPDgPzKTf6h07Ig&s" },
+                { name: "Tomato Tuna Pasta", description: "Your choice of pasta tossed in a tangy tomato sauce , with chunks of tuna.", price: "870 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2YmMG3Ju3_aqW8wfNIeSF3zTbfGHw-EZh7g&s" },
+                { name: "Bolognese Pasta", description: "Your choice of pasta tossed in a hearty meat sauce,  made with ground beef and pork,  simmered in a rich tomato sauce.", price: "870 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0noTTIBZfmD90ANZjgeX2ERzTHlJBROL6Ag&s" },
+                { name: "Pomodoro Pasta", description: "Your choice of pasta tossed in a simple yet delicious tomato sauce,  seasoned with  fresh herbs.", price: "600 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0Pbs9w9FM0sFVVshOOpmgHphWGGAs91cO_g&s" },
+                { name: "Primavera Pasta", description: "Your choice of pasta tossed in a light and flavorful sauce, with a color ful assortment of  grilled vegetables.", price: "620 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJmoNLee-52rCFuDlp7VRiIN62Mit6zag8Cw&s" },
+                { name: "Lasagna Bolognese", description: "Layers of pasta, filled with a rich Bolognese sauce,  creamy béchamel sauce, and  melted mozzarella cheese. Served with a side of fresh garden salad. ", price: "1343 Birr", image: "https://assets.epicurious.com/photos/54ad692d6529d92b2c0464f5/1:1/w_675,h_675,c_limit/51193620_lasagne-bolognese_1x1.jpg" },
+                { name: "Shrimp Alfredo", description: "Marinated grilled shrimp, tossed in a creamy alfred o sauce, with a sprinkle of Parmesan  cheese..", price: "2700 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSP0IqkgLX_76aQRb9-x4LCwmsWk8TLqDGmA&s" },
+            ],
+            continental: [
+                { name: "Kuku  Choma", description: "Juicy, grilled boneless chicken legs, served with ugal i, kachumbari, and spinach.", price: "1343 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpMvF__EDZDT6HTQ536PRKl5sjz4gVBlfADw&s" },
+                { name: "Jellof Rice with kuku fry ", description: "Pan-fried, marinated chicken strips, tossed in a sp icy and flavorful sauce,  served with seasoned rice.", price: "1343 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6D8Yu5D2s_nAP22kCsblAKqvjc9MrqEfLYw&s" },
+                { name: "Nyama  Dry Fry", description: "Tender beef cubes, stir-fried with aromatic spices, served with ugali, kachumbari,  and  spinach.", price: "1185 Birr", image: "https://i.ytimg.com/vi/h5OQsdQwyA8/sddefault.jpg" },
+                { name: "Crispy  Whole  Tilapia", description: "A  whole  tilapia  fish,  deep-fried  to  crispy  perfection,  served  with  ugal i,  kachumbari, and spinach. ", price: "1185 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhi-UTzFFipj__DYhJ7AeEzapJRduvGB4WJg&s" },
+                { name: "Goat  Tibs", description: "Tender goat meat, stir-fried in a spicy and flavorful sauce, served with injera, chi li sauce,  and spicy local mustard dipping sauce.", price: "1976 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjPZcU0iLBAnmgFdJTuHdY9GBk5VQx5d47Sg&s" },
+                { name: "Beef  Tibs ", description: "Tender  beef  strips,  stir-fried  with  onions,  tomatoes,  green  chili,  and  awaze,   served  with  injera.", price: "1185 Birr", image: "hhttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0vTXXUaktYZ6VsTBpuetoJnnGwMvd3L8WYg&s" },
+                { name: "Chicken Tibs", description: "Tender chicken strips, stir-fried with onions, tomat oes, green chili, and awaze, served with  injera. ", price: "1343 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5NnbgLoEGw3oOE6IalWbuXcUXpv75R50o0Q&s" },
+                { name: "Doro Wat", description: "A hearty stew of chicken, simmered in a rich and spicy sauce with hard- boiled eggs, served  with injera. ", price: "1343 Birr", image: "https://eggs.ca/wp-content/uploads/2024/06/EFC-doro-wat-hero-1280x720-1.jpg" },
+                { name: "Kitfo ", description: "Finely minced beef, seasoned with mitmita and kibé, served with kocho a nd injera. ", price: "1422 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXTOrkZiWpdZ72SVh87eQSkXctDEzrZRSC_g&s" },
+                { name: "Tibs Fir Fir", description: "A spicy and flavorful dish of beef tibs mixed with strips of injera and sautéed with  onions,  peppers, and spices.", price: "948 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnoUf5xxZs_GuGBtUWlH_Ik_-z_krw5nygeA&s" },
+                { name: "Chiqena  Tibs ", description: "Tender  steak  strips,  stir-fried  with  onions,  tomatoes,  green  chili,  and   awaze,  served  with injera. ", price: "1343 Birr", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBdAOUXexV4Z-poyvkw76mB31RESNiIi3bbw&s" }
+            ],
+            snacks: [
+                { name: "Crispy Samosas", description: "Spiced vegetable filling in a flaky pastry, served with mint chutney.", price: "300 Birr", image: "https://images.unsplash.com/photo-1601050690597-df056fb01793?q=80&w=200&auto=format&fit=crop" },
+                { name: "Loaded Nachos", description: "Corn tortillas topped with melted cheese, jalapeños, and fresh salsa.", price: "450 Birr", image: "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?q=80&w=200&auto=format&fit=crop" },
+                { name: "Chicken Wings", description: "Spicy buffalo wings served with creamy ranch dressing.", price: "500 Birr", image: "https://images.unsplash.com/photo-1527477396000-e27163b481c2?q=80&w=200&auto=format&fit=crop" },
+            ],
+            desserts: [
+                { name: "Chocolate Fondant", description: "Warm chocolate lava cake with vanilla bean gelato.", price: "900 Birr", image: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=200&auto=format&fit=crop" },
+                { name: "Fruit Sorbet", description: "Refreshing trio of seasonal fruit sorbets.", price: "900 Birr", image: "https://images.unsplash.com/photo-1505394033323-436bb0d213b9?q=80&w=200&auto=format&fit=crop" },
+                { name: "Tiramisu", description: "Classic Italian dessert with espresso-soaked ladyfingers and mascarpone.", price: "900 Birr", image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?q=80&w=200&auto=format&fit=crop" },
+            ],
+            fasting: [
+                { name: "Special Beyaynetu", description: "A colorful assortment of vegan stews including lentils, chickpeas, and vegetables, served on soft injera.", price: "350 Birr", image: "https://images.unsplash.com/photo-1606787366850-de6330128bfc?q=80&w=200&auto=format&fit=crop" },
+                { name: "Shiro Wat", description: "A flavorful chickpea powder stew simmered with onions, garlic, and traditional spices.", price: "250 Birr", image: "https://images.unsplash.com/photo-1541518763669-27fef04b14ea?q=80&w=200&auto=format&fit=crop" },
+                { name: "Misir Wat", description: "Spicy red lentil stew slow-cooked with berbere and aromatic herbs.", price: "300 Birr", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=200&auto=format&fit=crop" },
+                { name: "Fasting Firfir", description: "Shredded injera tossed in a spicy tomato and onion sauce.", price: "280 Birr", image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=200&auto=format&fit=crop" },
+            ],
+            drinks: [
+                { name: "Classic Margarita", description: "Tequila, fresh lime juice, and orange liqueur served over ice with a salted rim.", price: "400 Birr", image: "https://images.unsplash.com/photo-1568227451421-4fae4e5eb7a0?q=80&w=200&auto=format&fit=crop" },
+                { name: "Old Fashioned", description: "Bourbon, sugar, and bitters garnished with a twist of citrus rind.", price: "450 Birr", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=200&auto=format&fit=crop" },
+                { name: "Mojito", description: "White rum, sugar, lime juice, soda water, and mint.", price: "350 Birr", image: "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?q=80&w=200&auto=format&fit=crop" },
+                { name: "St. George Beer", description: "Local premium Ethiopian lager beer served ice cold.", price: "200 Birr", image: "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?q=80&w=200&auto=format&fit=crop" },
+                { name: "Fresh Lemonade", description: "Freshly squeezed lemons, mint leaves, and a touch of organic honey.", price: "150 Birr", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=200&auto=format&fit=crop" },
+                { name: "Mango Passion Juice", description: "Freshly blended mangoes and passion fruit puree.", price: "250 Birr", image: "https://images.unsplash.com/photo-1622597467836-f38240fcb21b?q=80&w=200&auto=format&fit=crop" }
+            ]
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const menuItemsContainer = document.getElementById('menu-items');
+            const categoryTitle = document.getElementById('category-title');
+
+            function renderMenu(category) {
+                categoryTitle.textContent = category.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                menuItemsContainer.innerHTML = '';
+                const items = menuData[category];
+
+                items.forEach((item, index) => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'menu-item';
+                    const priceParts = item.price.split(' ');
+                    const amount = priceParts[0];
+                    const currency = priceParts.slice(1).join(' ');
+
+                    itemElement.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" class="item-image">
+                        <div class="item-details">
+                            <div class="item-header">
+                                <h3 class="item-name">${item.name}</h3>
+                                <div class="item-price">
+                                    <span class="price-amount">${amount}</span>
+                                    <span class="price-currency">${currency}</span>
+                                </div>
+                            </div>
+                            <p class="item-description">${item.description}</p>
+                        </div>
+                    `;
+                    menuItemsContainer.appendChild(itemElement);
+
+                    setTimeout(() => {
+                        itemElement.classList.add('visible');
+                    }, 50 * index);
+                });
+            }
+
+            renderMenu('starters');
+
+            const allCategoryButtons = document.querySelectorAll('[data-category]');
+
+            allCategoryButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    allCategoryButtons.forEach(btn => btn.classList.remove('active'));
+
+                    button.classList.add('active');
+                    const category = button.getAttribute('data-category');
+
+                    renderMenu(category);
+
+                    if (window.innerWidth < 768) {
+                        categoryTitle.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                });
+            });
+
+            // Slider Logic
+            const sliderTrack = document.getElementById('slider-track');
+            const sliderSlides = document.querySelectorAll('.slide');
+            let currentSlideIndex = 0;
+            const totalSlides = sliderSlides.length;
+
+            if (totalSlides > 0) {
+                setInterval(() => {
+                    currentSlideIndex = (currentSlideIndex + 1) % totalSlides;
+                    sliderTrack.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+                }, 4500);
+            }
+        });
+    </script>
+</body>
+
+</html>
