@@ -287,9 +287,6 @@
         }
 
         .item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
             margin-bottom: 0.3rem;
         }
 
@@ -301,10 +298,10 @@
         }
 
         .item-price {
-            display: flex;
+            display: inline-flex;
             align-items: baseline;
             color: var(--accent-color);
-            margin-left: 1rem;
+            margin-top: 0.5rem;
             white-space: nowrap;
             background: color-mix(in srgb, var(--accent-color) 10%, transparent);
             padding: 0.2rem 0.6rem;
@@ -588,12 +585,12 @@
                         <div class="item-details">
                             <div class="item-header">
                                 <h3 class="item-name">${item.name}</h3>
-                                <div class="item-price">
-                                    <span class="price-amount">${amount}</span>
-                                    <span class="price-currency">${currency}</span>
-                                </div>
                             </div>
                             <p class="item-description">${item.description}</p>
+                            <div class="item-price">
+                                <span class="price-amount">${amount}</span>
+                                <span class="price-currency">${currency}</span>
+                            </div>
                         </div>
                     `;
                     menuItemsContainer.appendChild(itemElement);
