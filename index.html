@@ -61,22 +61,24 @@
 
         .header-layout {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
+            align-items: stretch;
+            justify-content: space-between;
+            width: 100%;
+            gap: 0;
         }
 
         .header-logo-container {
             display: flex;
-            align-items: stretch;
+            align-items: center;
             align-self: stretch;
+            flex: 0 0 auto;
         }
 
         .header-logo-image {
             height: 100%;
+            max-height: 220px;
             width: auto;
-            max-height: 280px;
-            object-fit: cover;
+            object-fit: contain;
             display: block;
         }
 
@@ -359,9 +361,9 @@
 
             .header-layout {
                 flex-direction: row;
-                align-items: center;
-                justify-content: center;
-                gap: 1rem;
+                align-items: stretch;
+                justify-content: space-between;
+                gap: 0;
             }
 
             .header-logo-container {
@@ -371,8 +373,9 @@
 
             .header-logo-image {
                 height: 100%;
-                max-height: 130px;
+                max-height: 120px;
                 width: auto;
+                object-fit: contain;
             }
 
             .header-content {
@@ -433,6 +436,9 @@
                     </span>
                 </h1>
                 <div class="logo-bottom">Chart</div>
+            </div>
+            <div class="header-logo-container">
+                <img src="Images/Logo/logo.jpg" alt="Union Logo" class="header-logo-image">
             </div>
         </div>
     </header>
