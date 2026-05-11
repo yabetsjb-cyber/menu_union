@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Cinzel:wght@500;700;900&family=Montserrat:wght@300;400;600&display=swap"
         rel="stylesheet">
     <style>
         :root {
@@ -95,38 +95,45 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 2px;
             margin: 0;
-            font-family: 'Playfair Display', serif;
+            padding: 1rem 0;
         }
 
-        .horizontal-logo span.primary {
+        .brand-name {
+            font-family: 'Cinzel', serif;
             color: var(--white);
-            font-weight: 900;
-            font-size: 2.2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .logo-top,
-        .logo-bottom {
-            font-family: 'Playfair Display', serif;
-            color: var(--primary-color);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-
-        .logo-top {
-            font-size: 1.1rem;
-            margin-bottom: 0.2rem;
             font-weight: 700;
+            font-size: 4rem;
+            text-transform: uppercase;
+            letter-spacing: 12px;
+            margin-right: -12px;
+            line-height: 1;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .logo-bottom {
-            font-size: 1.1rem;
-            margin-top: 0.2rem;
-            letter-spacing: 4px;
-            font-weight: 700;
+        .brand-sub {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--accent-color);
+            font-weight: 400;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 16px;
+            margin-right: -16px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .brand-sub::before,
+        .brand-sub::after {
+            content: '';
+            height: 1px;
+            width: 40px;
+            background-color: var(--accent-color);
+            margin: 0 15px;
+            opacity: 0.6;
         }
 
         /* Slider Section */
@@ -385,16 +392,27 @@
             }
 
             .horizontal-logo {
-                gap: 8px;
+                gap: 4px;
+                padding: 0.5rem 0;
             }
 
-            .horizontal-logo span.primary {
-                font-size: 1.8rem;
+            .brand-name {
+                font-size: 2.5rem;
+                letter-spacing: 8px;
+                margin-right: -8px;
             }
 
-            .logo-top,
-            .logo-bottom {
+            .brand-sub {
                 font-size: 0.9rem;
+                letter-spacing: 10px;
+                margin-right: -10px;
+                margin-top: 0.25rem;
+            }
+
+            .brand-sub::before,
+            .brand-sub::after {
+                width: 25px;
+                margin: 0 10px;
             }
 
             .category-nav {
@@ -425,12 +443,8 @@
         <div class="header-layout" style="justify-content: center;">
             <div class="header-content" style="padding: 1.5rem 0;">
                 <h1 class="horizontal-logo">
-                    <span class="word">
-                        <span class="primary">Union</span>
-                    </span>
-                    <span class="word">
-                        <span class="primary">Menu</span>
-                    </span>
+                    <span class="brand-name">Union</span>
+                    <span class="brand-sub">Menu</span>
                 </h1>
             </div>
         </div>
