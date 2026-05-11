@@ -47,7 +47,7 @@
         /* Hero Section */
         .hero {
             padding: 0 1rem;
-            background-color: var(--white);
+            background-color: var(--primary-color);
             display: flex;
             align-items: stretch;
             justify-content: center;
@@ -92,7 +92,8 @@
 
         .horizontal-logo {
             display: flex;
-            align-items: baseline;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
             gap: 12px;
             margin: 0;
@@ -100,7 +101,7 @@
         }
 
         .horizontal-logo span.primary {
-            color: var(--primary-color);
+            color: var(--white);
             font-weight: 900;
             font-size: 2.2rem;
             text-transform: uppercase;
@@ -421,12 +422,8 @@
 
 <body>
     <header class="hero">
-        <div class="header-layout">
-            <div class="header-logo-container">
-                <img src="Images/Logo/logo.jpg" alt="Union Logo" class="header-logo-image">
-            </div>
-            <div class="header-content">
-                <div class="logo-top">The</div>
+        <div class="header-layout" style="justify-content: center;">
+            <div class="header-content" style="padding: 1.5rem 0;">
                 <h1 class="horizontal-logo">
                     <span class="word">
                         <span class="primary">Union</span>
@@ -435,10 +432,6 @@
                         <span class="primary">Menu</span>
                     </span>
                 </h1>
-                <div class="logo-bottom">Chart</div>
-            </div>
-            <div class="header-logo-container">
-                <img src="Images/Logo/logo.jpg" alt="Union Logo" class="header-logo-image">
             </div>
         </div>
     </header>
@@ -475,7 +468,8 @@
             <li><button class="nav-btn" data-category="fasting">Fasting</button></li>
             <li><button class="nav-btn" data-category="snacks">Snacks</button></li>
             <li><button class="nav-btn" data-category="desserts">Desserts</button></li>
-            <li><button class="nav-btn" data-category="drinks">Drinks</button></li>
+            <li><button class="nav-btn" data-category="beverages">Beverages</button></li>
+            <li><button class="nav-btn" data-category="cocktails">Cocktails</button></li>
         </ul>
     </nav>
 
@@ -556,13 +550,17 @@
                 { name: "Misir Wat", description: "Spicy red lentil stew slow-cooked with berbere and aromatic herbs.", price: "300 Birr", image: "Images/fasting/7.jpg" },
                 { name: "Fasting Firfir", description: "Shredded injera tossed in a spicy tomato and onion sauce.", price: "280 Birr", image: "Images/fasting/8.jpg" },
             ],
-            drinks: [
+            beverages: [
+                { name: "Fresh Lemonade", description: "Freshly squeezed lemons, mint leaves, and a touch of organic honey.", price: "150 Birr", image: "Images/Drinks/3.jpg" },
+                { name: "Mango Passion Juice", description: "Freshly blended mangoes and passion fruit puree.", price: "250 Birr", image: "Images/Drinks/1.jpg" },
+                { name: "Hot Macchiato", description: "Traditional hot espresso with steamed milk foam.", price: "120 Birr", image: "Images/Drinks/4.jpg" },
+                { name: "Spiced Tea", description: "Hot Ethiopian spiced tea, infused with cardamom, cinnamon, and cloves.", price: "80 Birr", image: "Images/Drinks/2.jpg" }
+            ],
+            cocktails: [
                 { name: "Classic Margarita", description: "Tequila, fresh lime juice, and orange liqueur served over ice with a salted rim.", price: "400 Birr", image: "Images/Drinks/1.jpg" },
                 { name: "Old Fashioned", description: "Bourbon, sugar, and bitters garnished with a twist of citrus rind.", price: "450 Birr", image: "Images/Drinks/2.jpg" },
                 { name: "Mojito", description: "White rum, sugar, lime juice, soda water, and mint.", price: "350 Birr", image: "Images/Drinks/3.jpg" },
-                { name: "St. George Beer", description: "Local premium Ethiopian lager beer served ice cold.", price: "200 Birr", image: "Images/Drinks/4.jpg" },
-                { name: "Fresh Lemonade", description: "Freshly squeezed lemons, mint leaves, and a touch of organic honey.", price: "150 Birr", image: "Images/Drinks/3.jpg" },
-                { name: "Mango Passion Juice", description: "Freshly blended mangoes and passion fruit puree.", price: "250 Birr", image: "Images/Drinks/1.jpg" }
+                { name: "St. George Beer", description: "Local premium Ethiopian lager beer served ice cold.", price: "200 Birr", image: "Images/Drinks/4.jpg" }
             ]
         };
 
