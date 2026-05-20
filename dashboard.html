@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Union - Kitchen Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Cinzel:wght@500;700;900&family=Montserrat:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2b5329;
+            --accent-color: #e67e22;
+            --bg-color: #f4f7f6;
+            --board-bg: #e9ecef;
+            --text-color: #333333;
+            --muted-text: #666666;
+            --white: #ffffff;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+            --col-new: rgba(230, 126, 34, 0.1);
+            --col-prep: rgba(43, 83, 41, 0.08);
+            --col-ready: rgba(0, 0, 0, 0.03);
+
+            --tag-new: #e67e22;
+            --tag-prep: #3498db;
+            --tag-ready: #2ecc71;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh;
+            overflow: hidden;
+            /* Prevent scrolling on whole page */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Navigation Bar */
+        .top-nav {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .brand-logo {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand-sub {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .clock {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Board Layout */
+        .board {
+            display: flex;
+            flex: 1;
+            padding: 1rem;
+            gap: 1rem;
+            overflow-x: auto;
+            /* hide scrollbar */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .board::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Column Styling */
+        .kanban-col {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        .col-header {
+            padding: 1rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        #col-new .col-header {
+            border-color: var(--tag-new);
+            background: var(--col-new);
+            color: #d35400;
+        }
+
+        #col-prep .col-header {
+            border-color: var(--tag-prep);
+            background: var(--col-prep);
+            color: #2980b9;
+        }
+
+        #col-ready .col-header {
+            border-color: var(--tag-ready);
+            background: var(--col-ready);
+            color: #27ae60;
+        }
+
+        .col-count {
+            background: rgba(0, 0, 0, 0.1);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 50px;
+        }
+
+        /* Drop Zone */
+        .col-cards {
+            padding: 1rem;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background-color: #fafafa;
+        }
+
+        /* Order Card Styling */
+        .order-card {
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            padding: 1rem;
+            cursor: grab;
+            border-left: 5px solid transparent;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .order-card:active {
+            cursor: grabbing;
+        }
+
+        .order-card:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .order-card.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        /* Card States based on parent column */
+        #col-new .order-card {
+            border-left-color: var(--tag-new);
+        }
+
+        #col-prep .order-card {
+            border-left-color: var(--tag-prep);
+        }
+
+        #col-ready .order-card {
+            border-left-color: var(--tag-ready);
+            opacity: 0.8;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+        }
+
+        .table-badge {
+            background: var(--primary-color);
+            color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .time-badge {
+            font-size: 0.75rem;
+            color: var(--muted-text);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .time-badge.urgent {
+            color: #c0392b;
+            animation: blink 1s infinite alternate;
+        }
+
+        @keyframes blink {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0.5;
+            }
+        }
+
+        .item-list {
+            list-style: none;
+            margin-bottom: 0.75rem;
+        }
+
+        .item-list li {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .item-list li span.qty {
+            color: var(--accent-color);
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        /* Modifiers for addons */
+        .item-addon {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--muted-text);
+            font-weight: 500;
+            margin-left: 20px;
+            margin-top: -2px;
+            margin-bottom: 4px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.75rem;
+        }
+
+        .total-price {
+            font-size: 0.85rem;
+            color: var(--muted-text);
+            font-weight: 700;
+        }
+
+        /* Action Buttons */
+        .action-btn {
+            background: rgba(0, 0, 0, 0.05);
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hide specific buttons based on column */
+        #col-new .btn-done,
+        #col-new .btn-serve {
+            display: none;
+        }
+
+        #col-prep .btn-start,
+        #col-prep .btn-serve {
+            display: none;
+        }
+
+        #col-ready .btn-start,
+        #col-ready .btn-done {
+            display: none;
+        }
+
+        #col-new .btn-start {
+            background: color-mix(in srgb, var(--tag-prep) 15%, transparent);
+            color: #2980b9;
+        }
+
+        #col-prep .btn-done {
+            background: color-mix(in srgb, var(--tag-ready) 15%, transparent);
+            color: #27ae60;
+        }
+
+        #col-ready .btn-serve {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--muted-text);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="top-nav">
+        <div class="brand-logo">
+            UNION <span class="brand-sub">KITCHEN DISPLAY</span>
+        </div>
+        <div class="clock" id="clock">12:00 PM</div>
+    </header>
+
+    <main class="board">
+        <!-- New Orders Column -->
+        <div class="kanban-col" id="col-new">
+            <div class="col-header">
+                <div>🔥 New Orders</div>
+                <div class="col-count" id="count-new">2</div>
+            </div>
+            <div class="col-cards" data-col="new">
+
+                <!-- Sample Card 1 -->
+                <div class="order-card" draggable="true" id="order-1">
+                    <div class="card-header">
+                        <div class="table-badge">TBL 12</div>
+                        <div class="time-badge urgent">⏱ 8 min ago</div>
+                    </div>
+                    <ul class="item-list">
+                        <li><span class="qty">1x</span> Steak and Mash</li>
+                        <span class="item-addon">+ Mojito</span>
+                    </ul>
+                    <div class="card-footer">
+                        <span class="total-price">1,693 Birr</span>
+                        <button class="action-btn btn-start" onclick="moveCard('order-1', 'prep')">Start Prep ➔</button>
+                    </div>
+                </div>
+
+                <!-- Sample Card 2 -->
+                <div class="order-card" draggable="true" id="order-2">
+                    <div class="card-header">
+                        <div class="table-badge">TBL 04</div>
+                        <div class="time-badge">⏱ 2 min ago</div>
+                    </div>
+                    <ul class="item-list">
+                        <li><span class="qty">2x</span> Fish and Mash</li>
+                        <li><span class="qty">1x</span> Garden Salad</li>
+                        <span class="item-addon">+ Fresh Lemonade</span>
+                        <span class="item-addon">+ Mango Passion Juice</span>
+                    </ul>
+                    <div class="card-footer">
+                        <span class="total-price">3,911 Birr</span>
+                        <button class="action-btn btn-start" onclick="moveCard('order-2', 'prep')">Start Prep ➔</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Preparing Column -->
+        <div class="kanban-col" id="col-prep">
+            <div class="col-header">
+                <div>🍳 Preparing</div>
+                <div class="col-count" id="count-prep">1</div>
+            </div>
+            <div class="col-cards" data-col="prep">
+
+                <!-- Sample Card 3 -->
+                <div class="order-card" draggable="true" id="order-3">
+                    <div class="card-header">
+                        <div class="table-badge">TBL 08</div>
+                        <div class="time-badge">⏱ 15 min ago</div>
+                    </div>
+                    <ul class="item-list">
+                        <li><span class="qty">1x</span> Lasagna Bolognese</li>
+                        <li><span class="qty">1x</span> Crispy Samosas</li>
+                    </ul>
+                    <div class="card-footer">
+                        <span class="total-price">1,643 Birr</span>
+                        <button class="action-btn btn-done" onclick="moveCard('order-3', 'ready')">Mark Ready ✓</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Ready Column -->
+        <div class="kanban-col" id="col-ready">
+            <div class="col-header">
+                <div>🔔 Ready</div>
+                <div class="col-count" id="count-ready">1</div>
+            </div>
+            <div class="col-cards" data-col="ready">
+
+                <!-- Sample Card 4 -->
+                <div class="order-card" draggable="true" id="order-4">
+                    <div class="card-header">
+                        <div class="table-badge">TBL 02</div>
+                        <div class="time-badge">⏱ 22 min ago</div>
+                    </div>
+                    <ul class="item-list">
+                        <li><span class="qty">1x</span> Butter Chicken</li>
+                        <span class="item-addon">+ St. George Beer</span>
+                    </ul>
+                    <div class="card-footer">
+                        <span class="total-price">1,544 Birr</span>
+                        <button class="action-btn btn-serve" onclick="removeCard('order-4')">Archive ✕</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Update Clock
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }, 1000);
+
+        // --- Drag and Drop Logic ---
+        const cards = document.querySelectorAll('.order-card');
+        const containers = document.querySelectorAll('.col-cards');
+
+        cards.forEach(card => {
+            addDragListeners(card);
+        });
+
+        containers.forEach(container => {
+            container.addEventListener('dragover', e => {
+                e.preventDefault(); // Necessary to allow dropping
+                const draggingCard = document.querySelector('.dragging');
+                container.appendChild(draggingCard);
+            });
+
+            // Update counts when drop event fires
+            container.addEventListener('drop', e => {
+                updateCounts();
+            });
+        });
+
+        function addDragListeners(card) {
+            card.addEventListener('dragstart', () => {
+                card.classList.add('dragging');
+            });
+
+            card.addEventListener('dragend', () => {
+                card.classList.remove('dragging');
+                updateCounts();
+                // We update buttons based on parent to make sure correct ones show
+                updateButtons(card);
+            });
+        }
+
+        function updateCounts() {
+            const counts = {
+                'new': document.querySelectorAll('#col-new .order-card').length,
+                'prep': document.querySelectorAll('#col-prep .order-card').length,
+                'ready': document.querySelectorAll('#col-ready .order-card').length
+            };
+            document.getElementById('count-new').textContent = counts.new;
+            document.getElementById('count-prep').textContent = counts.prep;
+            document.getElementById('count-ready').textContent = counts.ready;
+        }
+
+        // --- Button Logic ---
+        window.moveCard = function (cardId, targetCol) {
+            const card = document.getElementById(cardId);
+            const container = document.querySelector(`.col-cards[data-col="${targetCol}"]`);
+            container.appendChild(card);
+            updateCounts();
+            updateButtons(card);
+        };
+
+        window.removeCard = function (cardId) {
+            const card = document.getElementById(cardId);
+            card.style.transform = 'scale(0)';
+            card.style.opacity = '0';
+            setTimeout(() => {
+                card.remove();
+                updateCounts();
+            }, 300);
+        };
+
+        function updateButtons(card) {
+            // Re-assign button onclicks based on what column it's now in.
+            // (Using CSS specificity we already hide/show the correct buttons)
+            const parentCol = card.closest('.kanban-col').id;
+
+            const btnStart = card.querySelector('.btn-start');
+            const btnDone = card.querySelector('.btn-done');
+
+            if (btnStart) btnStart.setAttribute('onclick', `moveCard('${card.id}', 'prep')`);
+            if (btnDone) btnDone.setAttribute('onclick', `moveCard('${card.id}', 'ready')`);
+        }
+
+    </script>
+</body>
+
+</html>

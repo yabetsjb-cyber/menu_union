@@ -681,6 +681,39 @@
             color: var(--primary-color);
         }
 
+        /* Table Input */
+        .table-input-container {
+            padding: 0 1.25rem 0.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .table-input-label {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .table-input {
+            width: 80px;
+            padding: 0.4rem 0.6rem;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .table-input:focus {
+            border-color: var(--primary-color);
+        }
+
         .place-order-btn {
             flex-shrink: 0;
             padding: 0.7rem 1.8rem;
@@ -920,6 +953,12 @@
 
             <button class="modal-confirm" id="modal-confirm">Clear selections</button>
         </div>
+
+        <div class="table-input-container">
+            <span class="table-input-label">Table No.</span>
+            <input type="number" id="table-number" class="table-input" min="1" max="100" placeholder="e.g. 12">
+        </div>
+
         <div class="modal-footer">
             <div class="total-section">
                 <span class="total-label">Total</span>
@@ -1177,6 +1216,9 @@
                 document.getElementById('cocktail-header').classList.remove('open');
                 document.getElementById('cocktail-items').classList.remove('open');
 
+                // Clear table number
+                document.getElementById('table-number').value = '';
+
                 overlay.classList.add('active');
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
@@ -1201,6 +1243,29 @@
 
             // Place Order
             document.getElementById('place-order').addEventListener('click', () => {
+                const tableNo = document.getElementById('table-number').value.trim();
+
+                if (!tableNo) {
+                    showToast('⚠️ Please enter your Table Number');
+                    document.getElementById('table-number').focus();
+                    return;
+                }
+
+                const foodName = document.getElementById('modal-food-name').textContent;
+                const total = document.getElementById('modal-total').textContent;
+                const drinks = [...selectedAddons.beverages, ...selectedAddons.cocktails];
+                const extra = drinks.length ? ` + ${drinks.join(', ')}` : '';
+
+                // Here is where we'd normally send the order payload to the backend/Firebase
+                const payload = {
+                    table: tableNo,
+                    food: foodName,
+                    drinks: drinks,
+                    total: total,
+                    status: 'new'
+                };
+                console.log("Sending order:", payload);
+
                 closeModal();
                 showToast('✅ Order confirmed');
             });
