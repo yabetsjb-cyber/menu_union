@@ -625,34 +625,87 @@
             font-weight: 500;
         }
 
-        /* Confirm Button */
+        /* Confirm selections (small text link) */
         .modal-confirm {
-            display: block;
-            width: 100%;
-            padding: 0.85rem;
+            display: inline-block;
+            background: none;
             border: none;
-            border-radius: 14px;
+            color: var(--primary-color);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            padding: 0.3rem 0;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            text-transform: none;
+        }
+
+        .modal-confirm:hover {
+            opacity: 1;
+        }
+
+        /* Sticky Place Order Footer */
+        .modal-footer {
+            position: sticky;
+            bottom: 0;
+            background: var(--white);
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .total-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .total-label {
+            font-size: 0.7rem;
+            color: var(--muted-text);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .total-amount {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        .place-order-btn {
+            flex-shrink: 0;
+            padding: 0.7rem 1.8rem;
+            border: none;
+            border-radius: 50px;
             background: linear-gradient(135deg, var(--primary-color), #3a7a37);
             color: var(--white);
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-weight: 700;
             letter-spacing: 0.5px;
             cursor: pointer;
-            margin-top: 1rem;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(43, 83, 41, 0.3);
             text-transform: uppercase;
         }
 
-        .modal-confirm:hover {
+        .place-order-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 25px rgba(43, 83, 41, 0.4);
             background: linear-gradient(135deg, #3a7a37, var(--accent-color));
         }
 
-        .modal-confirm:active {
-            transform: scale(0.98);
+        .place-order-btn:active {
+            transform: scale(0.97);
         }
 
         /* Toast */
@@ -865,7 +918,14 @@
                 <div class="addon-items" id="cocktail-items"></div>
             </div>
 
-            <button class="modal-confirm" id="modal-confirm">Confirm Order</button>
+            <button class="modal-confirm" id="modal-confirm">Clear selections</button>
+        </div>
+        <div class="modal-footer">
+            <div class="total-section">
+                <span class="total-label">Total</span>
+                <span class="total-amount" id="modal-total">0 Birr</span>
+            </div>
+            <button class="place-order-btn" id="place-order">Place Order</button>
         </div>
     </div>
 
@@ -1035,6 +1095,25 @@
 
             let selectedAddons = { beverages: new Set(), cocktails: new Set() };
 
+            let currentFoodPrice = 0;
+
+            function parsePrice(priceStr) {
+                return parseInt(priceStr.replace(/[^0-9]/g, '')) || 0;
+            }
+
+            function updateTotal() {
+                let total = currentFoodPrice;
+                selectedAddons.beverages.forEach(name => {
+                    const item = menuData.beverages.find(i => i.name === name);
+                    if (item) total += parsePrice(item.price);
+                });
+                selectedAddons.cocktails.forEach(name => {
+                    const item = menuData.cocktails.find(i => i.name === name);
+                    if (item) total += parsePrice(item.price);
+                });
+                document.getElementById('modal-total').textContent = total.toLocaleString() + ' Birr';
+            }
+
             // Build addon chips for a category
             function buildChips(containerId, dataKey, countId) {
                 const container = document.getElementById(containerId);
@@ -1050,6 +1129,7 @@
                         if (chip.classList.contains('selected')) { set.add(item.name); }
                         else { set.delete(item.name); }
                         document.getElementById(countId).textContent = set.size + ' selected';
+                        updateTotal();
                     });
                     container.appendChild(chip);
                 });
@@ -1079,6 +1159,7 @@
                 document.getElementById('modal-food-name').textContent = found.name;
                 document.getElementById('modal-food-desc').textContent = found.description;
                 document.getElementById('modal-food-price').textContent = found.price;
+                currentFoodPrice = parsePrice(found.price);
 
                 // Reset selections
                 selectedAddons = { beverages: new Set(), cocktails: new Set() };
@@ -1088,6 +1169,7 @@
                 // Build fresh chips
                 buildChips('bev-items', 'beverages', 'bev-count');
                 buildChips('cocktail-items', 'cocktails', 'cocktail-count');
+                updateTotal();
 
                 // Collapse accordions
                 document.getElementById('bev-header').classList.remove('open');
@@ -1108,13 +1190,23 @@
             modalClose.addEventListener('click', closeModal);
             overlay.addEventListener('click', closeModal);
 
-            // Confirm order
+            // Confirm = clear selections
             modalConfirm.addEventListener('click', () => {
+                selectedAddons = { beverages: new Set(), cocktails: new Set() };
+                document.getElementById('bev-count').textContent = '0 selected';
+                document.getElementById('cocktail-count').textContent = '0 selected';
+                document.querySelectorAll('.addon-chip.selected').forEach(c => c.classList.remove('selected'));
+                updateTotal();
+            });
+
+            // Place Order
+            document.getElementById('place-order').addEventListener('click', () => {
                 const foodName = document.getElementById('modal-food-name').textContent;
+                const total = document.getElementById('modal-total').textContent;
                 const drinks = [...selectedAddons.beverages, ...selectedAddons.cocktails];
                 const extra = drinks.length ? ` + ${drinks.join(', ')}` : '';
                 closeModal();
-                showToast(`✅ Order placed: ${foodName}${extra}`);
+                showToast(`✅ Order placed: ${foodName}${extra} — ${total}`);
             });
 
             function showToast(message) {
