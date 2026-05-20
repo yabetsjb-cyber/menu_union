@@ -392,20 +392,6 @@
             box-shadow: 0 2px 6px rgba(43, 83, 41, 0.2);
         }
 
-        .order-btn .btn-icon {
-            font-size: 1rem;
-            line-height: 1;
-            transition: transform 0.3s ease;
-        }
-
-        .order-btn:hover .btn-icon {
-            transform: rotate(-12deg) scale(1.15);
-        }
-
-        .order-btn .btn-text {
-            line-height: 1;
-        }
-
         /* Pulse animation on first render */
         @keyframes btnPulse {
             0% {
@@ -425,7 +411,251 @@
             animation: btnPulse 1.5s ease-in-out 1;
         }
 
-        /* Toast Notification */
+        /* ── Order Modal ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(6px);
+            z-index: 9998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .order-modal {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: var(--white);
+            border-radius: 24px 24px 0 0;
+            box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.18);
+            max-height: 88vh;
+            overflow-y: auto;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .order-modal.active {
+            transform: translateY(0);
+        }
+
+        .modal-handle {
+            width: 40px;
+            height: 4px;
+            background: #ccc;
+            border-radius: 4px;
+            margin: 10px auto 0;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--muted-text);
+            transition: transform 0.2s;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 0.75rem 1.25rem 1.5rem;
+        }
+
+        /* Food card inside modal */
+        .modal-food-card {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(43, 83, 41, 0.06), rgba(230, 126, 34, 0.06));
+            border-radius: 16px;
+            margin-bottom: 1.25rem;
+        }
+
+        .modal-food-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 14px;
+            object-fit: cover;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-food-info {
+            flex: 1;
+        }
+
+        .modal-food-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .modal-food-desc {
+            font-size: 0.78rem;
+            color: var(--muted-text);
+            line-height: 1.4;
+            margin-bottom: 6px;
+        }
+
+        .modal-food-price {
+            display: inline-block;
+            background: color-mix(in srgb, var(--accent-color) 12%, transparent);
+            color: var(--accent-color);
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 800;
+        }
+
+        /* Accordion Sections */
+        .addon-section {
+            margin-bottom: 0.75rem;
+        }
+
+        .addon-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.65rem 0.75rem;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            transition: all 0.25s ease;
+            user-select: none;
+        }
+
+        .addon-header:hover {
+            background: #3a7a37;
+        }
+
+        .addon-header .addon-arrow {
+            transition: transform 0.3s ease;
+            font-size: 0.75rem;
+        }
+
+        .addon-header.open .addon-arrow {
+            transform: rotate(180deg);
+        }
+
+        .addon-header .addon-badge {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 2px 8px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: auto;
+            margin-right: 8px;
+        }
+
+        .addon-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.75rem 0.25rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+        }
+
+        .addon-items.open {
+            max-height: 500px;
+            padding: 0.75rem 0.25rem;
+        }
+
+        /* Selectable Chips */
+        .addon-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.35rem 0.75rem;
+            border: 1.5px solid #ddd;
+            border-radius: 50px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background: var(--white);
+            user-select: none;
+        }
+
+        .addon-chip:hover {
+            border-color: var(--primary-color);
+            background: rgba(43, 83, 41, 0.04);
+        }
+
+        .addon-chip.selected {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(43, 83, 41, 0.1), rgba(43, 83, 41, 0.05));
+            color: var(--primary-color);
+            box-shadow: 0 2px 8px rgba(43, 83, 41, 0.15);
+        }
+
+        .addon-chip.selected::before {
+            content: '✓';
+            font-size: 0.7rem;
+            font-weight: 800;
+        }
+
+        .addon-chip .chip-price {
+            font-size: 0.65rem;
+            opacity: 0.65;
+            font-weight: 500;
+        }
+
+        /* Confirm Button */
+        .modal-confirm {
+            display: block;
+            width: 100%;
+            padding: 0.85rem;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--primary-color), #3a7a37);
+            color: var(--white);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(43, 83, 41, 0.3);
+            text-transform: uppercase;
+        }
+
+        .modal-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(43, 83, 41, 0.4);
+            background: linear-gradient(135deg, #3a7a37, var(--accent-color));
+        }
+
+        .modal-confirm:active {
+            transform: scale(0.98);
+        }
+
+        /* Toast */
         .order-toast {
             position: fixed;
             bottom: 30px;
@@ -439,14 +669,10 @@
             font-size: 0.85rem;
             font-weight: 600;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-            z-index: 9999;
+            z-index: 10000;
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            backdrop-filter: blur(10px);
         }
 
         .order-toast.show {
@@ -606,6 +832,43 @@
         </div>
     </main>
 
+    <!-- Order Modal -->
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="order-modal" id="order-modal">
+        <div class="modal-handle"></div>
+        <button class="modal-close" id="modal-close">✕</button>
+        <div class="modal-body">
+            <div class="modal-food-card">
+                <img class="modal-food-img" id="modal-food-img" src="" alt="">
+                <div class="modal-food-info">
+                    <div class="modal-food-name" id="modal-food-name"></div>
+                    <div class="modal-food-desc" id="modal-food-desc"></div>
+                    <div class="modal-food-price" id="modal-food-price"></div>
+                </div>
+            </div>
+
+            <div class="addon-section">
+                <div class="addon-header" id="bev-header">
+                    🥤 Add a Beverage
+                    <span class="addon-badge" id="bev-count">0 selected</span>
+                    <span class="addon-arrow">▼</span>
+                </div>
+                <div class="addon-items" id="bev-items"></div>
+            </div>
+
+            <div class="addon-section">
+                <div class="addon-header" id="cocktail-header">
+                    🍸 Add a Cocktail
+                    <span class="addon-badge" id="cocktail-count">0 selected</span>
+                    <span class="addon-arrow">▼</span>
+                </div>
+                <div class="addon-items" id="cocktail-items"></div>
+            </div>
+
+            <button class="modal-confirm" id="modal-confirm">Confirm Order</button>
+        </div>
+    </div>
+
     <footer class="footer">
         <p>All prices are inclusive of 10% service charge and 15% VAT </p>
         <p>&copy; Union cocktail Bar and Restaurant. All rights reserved.</p> <!--This is there brand-->
@@ -764,15 +1027,95 @@
                 }, 4500);
             }
 
-            // Order + Toast logic
+            // ── Order Modal Logic ──
+            const modal = document.getElementById('order-modal');
+            const overlay = document.getElementById('modal-overlay');
+            const modalClose = document.getElementById('modal-close');
+            const modalConfirm = document.getElementById('modal-confirm');
+
+            let selectedAddons = { beverages: new Set(), cocktails: new Set() };
+
+            // Build addon chips for a category
+            function buildChips(containerId, dataKey, countId) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+                menuData[dataKey].forEach(item => {
+                    const chip = document.createElement('span');
+                    chip.className = 'addon-chip';
+                    chip.dataset.name = item.name;
+                    chip.innerHTML = `${item.name} <span class="chip-price">${item.price}</span>`;
+                    chip.addEventListener('click', () => {
+                        chip.classList.toggle('selected');
+                        const set = selectedAddons[dataKey];
+                        if (chip.classList.contains('selected')) { set.add(item.name); }
+                        else { set.delete(item.name); }
+                        document.getElementById(countId).textContent = set.size + ' selected';
+                    });
+                    container.appendChild(chip);
+                });
+            }
+
+            // Accordion toggles
+            document.getElementById('bev-header').addEventListener('click', () => {
+                document.getElementById('bev-header').classList.toggle('open');
+                document.getElementById('bev-items').classList.toggle('open');
+            });
+            document.getElementById('cocktail-header').addEventListener('click', () => {
+                document.getElementById('cocktail-header').classList.toggle('open');
+                document.getElementById('cocktail-items').classList.toggle('open');
+            });
+
+            // Open modal
             window.orderItem = function (itemName) {
-                showToast(`✅ Opening order for "${itemName}"…`);
-                const phone = '251900000000'; // Replace with actual restaurant number
-                const msg = encodeURIComponent(`Hi! I'd like to order: ${itemName}`);
-                setTimeout(() => {
-                    window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
-                }, 600);
+                // Find the item across all categories
+                let found = null;
+                for (const cat of Object.values(menuData)) {
+                    found = cat.find(i => i.name === itemName);
+                    if (found) break;
+                }
+                if (!found) return;
+
+                document.getElementById('modal-food-img').src = found.image;
+                document.getElementById('modal-food-name').textContent = found.name;
+                document.getElementById('modal-food-desc').textContent = found.description;
+                document.getElementById('modal-food-price').textContent = found.price;
+
+                // Reset selections
+                selectedAddons = { beverages: new Set(), cocktails: new Set() };
+                document.getElementById('bev-count').textContent = '0 selected';
+                document.getElementById('cocktail-count').textContent = '0 selected';
+
+                // Build fresh chips
+                buildChips('bev-items', 'beverages', 'bev-count');
+                buildChips('cocktail-items', 'cocktails', 'cocktail-count');
+
+                // Collapse accordions
+                document.getElementById('bev-header').classList.remove('open');
+                document.getElementById('bev-items').classList.remove('open');
+                document.getElementById('cocktail-header').classList.remove('open');
+                document.getElementById('cocktail-items').classList.remove('open');
+
+                overlay.classList.add('active');
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
             };
+
+            function closeModal() {
+                modal.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            modalClose.addEventListener('click', closeModal);
+            overlay.addEventListener('click', closeModal);
+
+            // Confirm order
+            modalConfirm.addEventListener('click', () => {
+                const foodName = document.getElementById('modal-food-name').textContent;
+                const drinks = [...selectedAddons.beverages, ...selectedAddons.cocktails];
+                const extra = drinks.length ? ` + ${drinks.join(', ')}` : '';
+                closeModal();
+                showToast(`✅ Order placed: ${foodName}${extra}`);
+            });
 
             function showToast(message) {
                 let toast = document.querySelector('.order-toast');
@@ -783,7 +1126,7 @@
                 }
                 toast.textContent = message;
                 toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2500);
+                setTimeout(() => toast.classList.remove('show'), 3000);
             }
         });
     </script>
