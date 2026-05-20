@@ -1201,12 +1201,8 @@
 
             // Place Order
             document.getElementById('place-order').addEventListener('click', () => {
-                const foodName = document.getElementById('modal-food-name').textContent;
-                const total = document.getElementById('modal-total').textContent;
-                const drinks = [...selectedAddons.beverages, ...selectedAddons.cocktails];
-                const extra = drinks.length ? ` + ${drinks.join(', ')}` : '';
                 closeModal();
-                showToast(`✅ Order placed: ${foodName}${extra} — ${total}`);
+                showToast('✅ Order confirmed');
             });
 
             function showToast(message) {
