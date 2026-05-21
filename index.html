@@ -766,6 +766,89 @@
             opacity: 1;
         }
 
+        /* Order Tracker Banner */
+        .order-tracker {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(150%);
+            background: var(--white);
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            z-index: 9997;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .order-tracker.visible {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .tracker-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+        }
+
+        .tracker-label {
+            font-size: 0.8rem;
+            color: var(--muted-text);
+        }
+
+        .tracker-status {
+            font-size: 0.95rem;
+            color: var(--primary-color);
+            font-weight: 800;
+        }
+
+        .tracker-progress {
+            width: 100%;
+            height: 6px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--accent-color);
+            transition: width 0.4s;
+        }
+
+        .status-new .tracker-status {
+            color: #d35400;
+        }
+
+        .status-new .progress-bar {
+            background: #d35400;
+            width: 33%;
+        }
+
+        .status-prep .tracker-status {
+            color: #3498db;
+        }
+
+        .status-prep .progress-bar {
+            background: #3498db;
+            width: 66%;
+        }
+
+        .status-ready .tracker-status {
+            color: #2ecc71;
+        }
+
+        .status-ready .progress-bar {
+            background: #2ecc71;
+            width: 100%;
+        }
+
         /* Footer */
         .footer {
             background-color: var(--primary-color);
@@ -968,6 +1051,17 @@
         </div>
     </div>
 
+    <!-- Floating Order Tracker -->
+    <div id="order-tracker" class="order-tracker">
+        <div class="tracker-info">
+            <span class="tracker-label">Your Order (TBL <span id="tracker-table"></span>)</span>
+            <span class="tracker-status" id="tracker-status">Sent to Kitchen 📋</span>
+        </div>
+        <div class="tracker-progress">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+    </div>
+
     <footer class="footer">
         <p>All prices are inclusive of 10% service charge and 15% VAT </p>
         <p>&copy; Union cocktail Bar and Restaurant. All rights reserved.</p> <!--This is there brand-->
@@ -976,7 +1070,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAd3vq7LbGcxEzATPq2oQyDskI8IrddVfg",
@@ -993,6 +1087,7 @@
         window.firebaseDb = db;
         window.firebaseRef = ref;
         window.firebasePush = push;
+        window.firebaseOnValue = onValue;
     </script>
     <script>
         const menuData = {
@@ -1287,7 +1382,10 @@
                 };
 
                 if (window.firebasePush && window.firebaseRef && window.firebaseDb) {
-                    window.firebasePush(window.firebaseRef(window.firebaseDb, 'orders'), payload);
+                    const newOrderRef = window.firebasePush(window.firebaseRef(window.firebaseDb, 'orders'), payload);
+                    localStorage.setItem('activeOrderId', newOrderRef.key);
+                    localStorage.setItem('activeOrderTable', tableNo);
+                    if (window.startTracking) window.startTracking(newOrderRef.key, tableNo);
                 } else {
                     console.log("Sending order locally (Firebase not loaded):", payload);
                 }
@@ -1306,6 +1404,37 @@
                 toast.textContent = message;
                 toast.classList.add('show');
                 setTimeout(() => toast.classList.remove('show'), 3000);
+            }
+
+            window.startTracking = function (orderId, table) {
+                const tracker = document.getElementById('order-tracker');
+                document.getElementById('tracker-table').textContent = table;
+                tracker.className = 'order-tracker visible status-new';
+
+                if (window.firebaseOnValue && window.firebaseRef && window.firebaseDb) {
+                    const orderRef = window.firebaseRef(window.firebaseDb, 'orders/' + orderId);
+                    window.firebaseOnValue(orderRef, (snapshot) => {
+                        const data = snapshot.val();
+                        if (data) {
+                            tracker.className = `order-tracker visible status-${data.status}`;
+                            let statusText = "Sent to Kitchen 📋";
+                            if (data.status === 'prep') statusText = "Cooking... 🍳";
+                            if (data.status === 'ready') statusText = "Ready! 🛎️";
+                            document.getElementById('tracker-status').textContent = statusText;
+                        } else {
+                            tracker.classList.remove('visible');
+                            localStorage.removeItem('activeOrderId');
+                            localStorage.removeItem('activeOrderTable');
+                        }
+                    });
+                }
+            };
+
+            // Auto-resume tracking if they refresh
+            const savedOrderId = localStorage.getItem('activeOrderId');
+            const savedTable = localStorage.getItem('activeOrderTable');
+            if (savedOrderId && savedTable) {
+                window.startTracking(savedOrderId, savedTable);
             }
         });
     </script>
