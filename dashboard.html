@@ -562,10 +562,16 @@
         const bellSound = new Audio('https://actions.google.com/sounds/v1/cartoon/bell_ding.ogg');
 
         let dbListenersInitialized = false;
+        let initialDataLoaded = false;
 
         function initDatabaseListeners() {
             if (dbListenersInitialized) return;
             dbListenersInitialized = true;
+
+            // Wait 2 seconds before enabling sounds to avoid ringing for old orders on refresh
+            setTimeout(() => {
+                initialDataLoaded = true;
+            }, 2000);
 
             const connectedRef = ref(db, ".info/connected");
             const offlineBanner = document.getElementById('offline-banner');
@@ -585,9 +591,11 @@
                 createCard(snapshot.key, val);
                 if (window.updateCounts) window.updateCounts();
 
-                // Play sound only for genuinely new orders (arrived in the last 10 seconds)
-                if (val.timestamp && (Date.now() - val.timestamp) < 10000) {
-                    bellSound.play().catch(e => console.log('Audio play blocked:', e));
+                // Play sound only for new arriving orders after the app has initially loaded
+                if (initialDataLoaded && val.status === 'new') {
+                    // Resetting audio time ensures it plays fully even if spammed
+                    bellSound.currentTime = 0;
+                    bellSound.play().catch(e => console.log('Audio play blocked by browser:', e));
                 }
             });
 
