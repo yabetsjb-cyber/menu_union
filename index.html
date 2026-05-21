@@ -1097,7 +1097,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+        import { getDatabase, ref, push, onValue, get } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAd3vq7LbGcxEzATPq2oQyDskI8IrddVfg",
@@ -1115,6 +1115,7 @@
         window.firebaseRef = ref;
         window.firebasePush = push;
         window.firebaseOnValue = onValue;
+        window.firebaseGet = get;
     </script>
     <script>
         const menuData = {
@@ -1236,7 +1237,30 @@
                 });
             }
 
-            renderMenu('starters');
+            const urlParams = new URLSearchParams(window.location.search);
+            const userPasscode = urlParams.get('passcode');
+
+            if (window.firebaseGet && window.firebaseRef && window.firebaseDb) {
+                window.firebaseGet(window.firebaseRef(window.firebaseDb, 'settings/activeToken')).then((snapshot) => {
+                    const activeToken = snapshot.val();
+
+                    // Allow access if they match or if the admin hasn't generated a token yet
+                    if (!activeToken || userPasscode === activeToken) {
+                        renderMenu('starters');
+                    } else {
+                        document.body.innerHTML = `
+                            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; background: #2b5329; color: white; padding: 2rem; font-family: 'Plus Jakarta Sans', sans-serif;">
+                                <h1 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 1rem;">Menu Locked 🔒</h1>
+                                <p style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 1.5rem;">To view our menu and place an order, please scan the QR code located safely at your table!</p>
+                            </div>
+                        `;
+                    }
+                }).catch(err => {
+                    renderMenu('starters');
+                });
+            } else {
+                renderMenu('starters');
+            }
 
             const allCategoryButtons = document.querySelectorAll('[data-category]');
 

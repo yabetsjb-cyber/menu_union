@@ -478,7 +478,15 @@
         <div class="brand-logo">
             UNION <span class="brand-sub">KITCHEN DISPLAY</span>
         </div>
-        <div style="display: flex; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div id="passcode-widget"
+                style="display: none; align-items: center; background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 6px; font-size: 0.85rem;">
+                QR Pass: <strong id="current-passcode"
+                    style="color: var(--accent-color); margin-left: 5px;">...</strong>
+                <button id="regen-passcode-btn"
+                    style="background: none; border: none; color: white; cursor: pointer; margin-left: 10px; font-size: 1.1rem;"
+                    title="Generate New QR Passcode">🔄</button>
+            </div>
             <div class="clock" id="clock">12:00 PM</div>
             <button id="logout-btn" class="logout-btn" style="display: none;">Logout</button>
         </div>
@@ -535,7 +543,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getDatabase, ref, onChildAdded, onChildChanged, onChildRemoved, update, remove, onValue } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+        import { getDatabase, ref, onChildAdded, onChildChanged, onChildRemoved, update, remove, onValue, set } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
         const firebaseConfig = {
@@ -636,6 +644,19 @@
                 // User is signed in
                 loginOverlay.classList.add('hidden');
                 logoutBtn.style.display = 'block';
+                document.getElementById('passcode-widget').style.display = 'flex';
+
+                // Track activePasscode
+                const tokenRef = ref(db, 'settings/activeToken');
+                onValue(tokenRef, (snap) => {
+                    const token = snap.val();
+                    if (!token) {
+                        set(tokenRef, 'start123'); // Generate default parameter if empty
+                    } else {
+                        document.getElementById('current-passcode').textContent = token;
+                    }
+                });
+
                 initDatabaseListeners();
             } else {
                 // User is signed out
@@ -673,6 +694,16 @@
             signOut(auth).then(() => {
                 // Let onAuthStateChanged handle the UI cleanup
             });
+        });
+
+        document.getElementById('regen-passcode-btn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to change the QR passcode? Anyone currently trying to open their bookmarked links from home will be locked out immediately.')) {
+                const words = ["alpha", "beta", "gamma", "delta", "echo", "tiger", "lion", "bear", "wolf", "fox"];
+                // Generate a passcode like 'beta421'
+                const token = words[Math.floor(Math.random() * words.length)] + Math.floor(Math.random() * 1000);
+                const dbRef = window.firebaseDb;
+                set(ref(dbRef, 'settings/activeToken'), token);
+            }
         });
 
         function createCard(id, data) {

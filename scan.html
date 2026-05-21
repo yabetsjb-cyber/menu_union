@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Menu Loading...</title>
+    <style>
+        body {
+            background: #2b5329;
+            color: white;
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .loader {
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div style="text-align: center;">
+        <div class="loader" style="margin: 0 auto 20px;"></div>
+        <p>Connecting to your table...</p>
+    </div>
+
+    <!-- Firebase Script to route the dynamic token -->
+    <script type="module">
+        // It's safe for this minimal script to grab the token from Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+
+        // Ensure you paste the same firebaseConfig here if it isn't linked external
+        const firebaseConfig = {
+            apiKey: "AIzaSyAd3vq7LbGcxEzATPq2oQyDskI8IrddVfg",
+            authDomain: "unionmenu.firebaseapp.com",
+            projectId: "unionmenu",
+            storageBucket: "unionmenu.firebasestorage.app",
+            messagingSenderId: "251100196143",
+            appId: "1:251100196143:web:2cbc1b1ad114354dae05da"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Fetch the active passkey from the public 'settings/activeToken' node
+        get(ref(db, 'settings/activeToken')).then((snapshot) => {
+            const token = snapshot.val();
+            // Redirect the browser entirely to index.html with the embedded token
+            window.location.replace(`index.html?passcode=${token}`);
+        }).catch(() => {
+            // Failsafe timeout
+            window.location.replace(`index.html`);
+        });
+    </script>
+</body>
+
+</html>
