@@ -974,6 +974,26 @@
 
     </footer>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAd3vq7LbGcxEzATPq2oQyDskI8IrddVfg",
+            authDomain: "unionmenu.firebaseapp.com",
+            projectId: "unionmenu",
+            storageBucket: "unionmenu.firebasestorage.app",
+            messagingSenderId: "251100196143",
+            appId: "1:251100196143:web:2cbc1b1ad114354dae05da",
+            measurementId: "G-LBMB17VV0D"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        window.firebaseDb = db;
+        window.firebaseRef = ref;
+        window.firebasePush = push;
+    </script>
     <script>
         const menuData = {
             starters: [
@@ -1256,15 +1276,21 @@
                 const drinks = [...selectedAddons.beverages, ...selectedAddons.cocktails];
                 const extra = drinks.length ? ` + ${drinks.join(', ')}` : '';
 
-                // Here is where we'd normally send the order payload to the backend/Firebase
+                // Send the order payload to Firebase
                 const payload = {
                     table: tableNo,
                     food: foodName,
                     drinks: drinks,
                     total: total,
-                    status: 'new'
+                    status: 'new',
+                    timestamp: Date.now()
                 };
-                console.log("Sending order:", payload);
+
+                if (window.firebasePush && window.firebaseRef && window.firebaseDb) {
+                    window.firebasePush(window.firebaseRef(window.firebaseDb, 'orders'), payload);
+                } else {
+                    console.log("Sending order locally (Firebase not loaded):", payload);
+                }
 
                 closeModal();
                 showToast('✅ Order confirmed');

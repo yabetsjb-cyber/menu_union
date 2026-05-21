@@ -12,20 +12,22 @@
         rel="stylesheet">
     <style>
         :root {
-            --primary-color: #2b5329;
-            --accent-color: #e67e22;
-            --bg-color: #f4f7f6;
-            --board-bg: #e9ecef;
-            --text-color: #333333;
-            --muted-text: #666666;
-            --white: #ffffff;
-            --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            /* Updated to Blue-Black sleek theme */
+            --primary-color: #0d1117;
+            --accent-color: #58a6ff;
+            --bg-color: #010409;
+            --board-bg: #161b22;
+            --text-color: #c9d1d9;
+            --muted-text: #8b949e;
+            --white: #161b22;
+            /* Used for card backgrounds now */
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 
-            --col-new: rgba(230, 126, 34, 0.1);
-            --col-prep: rgba(43, 83, 41, 0.08);
-            --col-ready: rgba(0, 0, 0, 0.03);
+            --col-new: rgba(230, 126, 34, 0.05);
+            --col-prep: rgba(52, 152, 219, 0.05);
+            --col-ready: rgba(46, 204, 113, 0.05);
 
-            --tag-new: #e67e22;
+            --tag-new: #d35400;
             --tag-prep: #3498db;
             --tag-ready: #2ecc71;
         }
@@ -123,33 +125,32 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: var(--board-bg);
+            color: var(--text-color);
         }
 
         #col-new .col-header {
             border-color: var(--tag-new);
             background: var(--col-new);
-            color: #d35400;
         }
 
         #col-prep .col-header {
             border-color: var(--tag-prep);
             background: var(--col-prep);
-            color: #2980b9;
         }
 
         #col-ready .col-header {
             border-color: var(--tag-ready);
             background: var(--col-ready);
-            color: #27ae60;
         }
 
         .col-count {
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.1);
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 0.8rem;
             padding: 2px 8px;
             border-radius: 50px;
+            color: var(--text-color);
         }
 
         /* Drop Zone */
@@ -160,14 +161,15 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            background-color: #fafafa;
+            background-color: var(--board-bg);
         }
 
         /* Order Card Styling */
         .order-card {
-            background: var(--white);
+            background: var(--bg-color);
+            /* Darker inside the card */
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             padding: 1rem;
             cursor: grab;
             border-left: 5px solid transparent;
@@ -293,7 +295,8 @@
 
         /* Action Buttons */
         .action-btn {
-            background: rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.08);
+            /* Dark mode subtle background */
             border: none;
             padding: 0.4rem 0.8rem;
             border-radius: 6px;
@@ -302,10 +305,11 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
+            color: var(--text-color);
         }
 
         .action-btn:hover {
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         /* Hide specific buttons based on column */
@@ -325,17 +329,17 @@
         }
 
         #col-new .btn-start {
-            background: color-mix(in srgb, var(--tag-prep) 15%, transparent);
-            color: #2980b9;
+            background: color-mix(in srgb, var(--tag-prep) 25%, transparent);
+            color: #58a6ff;
         }
 
         #col-prep .btn-done {
-            background: color-mix(in srgb, var(--tag-ready) 15%, transparent);
-            color: #27ae60;
+            background: color-mix(in srgb, var(--tag-ready) 25%, transparent);
+            color: #2ea043;
         }
 
         #col-ready .btn-serve {
-            background: rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.1);
             color: var(--muted-text);
         }
     </style>
@@ -355,44 +359,9 @@
         <div class="kanban-col" id="col-new">
             <div class="col-header">
                 <div>🔥 New Orders</div>
-                <div class="col-count" id="count-new">2</div>
+                <div class="col-count" id="count-new">0</div>
             </div>
             <div class="col-cards" data-col="new">
-
-                <!-- Sample Card 1 -->
-                <div class="order-card" draggable="true" id="order-1">
-                    <div class="card-header">
-                        <div class="table-badge">TBL 12</div>
-                        <div class="time-badge urgent">⏱ 8 min ago</div>
-                    </div>
-                    <ul class="item-list">
-                        <li><span class="qty">1x</span> Steak and Mash</li>
-                        <span class="item-addon">+ Mojito</span>
-                    </ul>
-                    <div class="card-footer">
-                        <span class="total-price">1,693 Birr</span>
-                        <button class="action-btn btn-start" onclick="moveCard('order-1', 'prep')">Start Prep ➔</button>
-                    </div>
-                </div>
-
-                <!-- Sample Card 2 -->
-                <div class="order-card" draggable="true" id="order-2">
-                    <div class="card-header">
-                        <div class="table-badge">TBL 04</div>
-                        <div class="time-badge">⏱ 2 min ago</div>
-                    </div>
-                    <ul class="item-list">
-                        <li><span class="qty">2x</span> Fish and Mash</li>
-                        <li><span class="qty">1x</span> Garden Salad</li>
-                        <span class="item-addon">+ Fresh Lemonade</span>
-                        <span class="item-addon">+ Mango Passion Juice</span>
-                    </ul>
-                    <div class="card-footer">
-                        <span class="total-price">3,911 Birr</span>
-                        <button class="action-btn btn-start" onclick="moveCard('order-2', 'prep')">Start Prep ➔</button>
-                    </div>
-                </div>
-
             </div>
         </div>
 
@@ -400,26 +369,9 @@
         <div class="kanban-col" id="col-prep">
             <div class="col-header">
                 <div>🍳 Preparing</div>
-                <div class="col-count" id="count-prep">1</div>
+                <div class="col-count" id="count-prep">0</div>
             </div>
             <div class="col-cards" data-col="prep">
-
-                <!-- Sample Card 3 -->
-                <div class="order-card" draggable="true" id="order-3">
-                    <div class="card-header">
-                        <div class="table-badge">TBL 08</div>
-                        <div class="time-badge">⏱ 15 min ago</div>
-                    </div>
-                    <ul class="item-list">
-                        <li><span class="qty">1x</span> Lasagna Bolognese</li>
-                        <li><span class="qty">1x</span> Crispy Samosas</li>
-                    </ul>
-                    <div class="card-footer">
-                        <span class="total-price">1,643 Birr</span>
-                        <button class="action-btn btn-done" onclick="moveCard('order-3', 'ready')">Mark Ready ✓</button>
-                    </div>
-                </div>
-
             </div>
         </div>
 
@@ -427,29 +379,102 @@
         <div class="kanban-col" id="col-ready">
             <div class="col-header">
                 <div>🔔 Ready</div>
-                <div class="col-count" id="count-ready">1</div>
+                <div class="col-count" id="count-ready">0</div>
             </div>
             <div class="col-cards" data-col="ready">
-
-                <!-- Sample Card 4 -->
-                <div class="order-card" draggable="true" id="order-4">
-                    <div class="card-header">
-                        <div class="table-badge">TBL 02</div>
-                        <div class="time-badge">⏱ 22 min ago</div>
-                    </div>
-                    <ul class="item-list">
-                        <li><span class="qty">1x</span> Butter Chicken</li>
-                        <span class="item-addon">+ St. George Beer</span>
-                    </ul>
-                    <div class="card-footer">
-                        <span class="total-price">1,544 Birr</span>
-                        <button class="action-btn btn-serve" onclick="removeCard('order-4')">Archive ✕</button>
-                    </div>
-                </div>
-
             </div>
         </div>
     </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getDatabase, ref, onChildAdded, onChildChanged, onChildRemoved, update, remove } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAd3vq7LbGcxEzATPq2oQyDskI8IrddVfg",
+            authDomain: "unionmenu.firebaseapp.com",
+            projectId: "unionmenu",
+            storageBucket: "unionmenu.firebasestorage.app",
+            messagingSenderId: "251100196143",
+            appId: "1:251100196143:web:2cbc1b1ad114354dae05da",
+            measurementId: "G-LBMB17VV0D"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        window.firebaseDb = db;
+        window.firebaseRef = ref;
+        window.firebaseUpdate = update;
+        window.firebaseRemove = remove;
+
+        const ordersRef = ref(db, 'orders');
+
+        onChildAdded(ordersRef, (snapshot) => {
+            const val = snapshot.val();
+            createCard(snapshot.key, val);
+            if (window.updateCounts) window.updateCounts();
+        });
+
+        onChildChanged(ordersRef, (snapshot) => {
+            const val = snapshot.val();
+            const card = document.getElementById('order-' + snapshot.key);
+            if (card) {
+                const container = document.querySelector(`.col-cards[data-col="${val.status}"]`);
+                if (container && card.parentElement !== container) {
+                    container.appendChild(card);
+                    if (window.updateButtons) window.updateButtons(card);
+                }
+            }
+            if (window.updateCounts) window.updateCounts();
+        });
+
+        onChildRemoved(ordersRef, (snapshot) => {
+            const card = document.getElementById('order-' + snapshot.key);
+            if (card) {
+                card.remove();
+                if (window.updateCounts) window.updateCounts();
+            }
+        });
+
+        function createCard(id, data) {
+            const container = document.querySelector(`.col-cards[data-col="${data.status}"]`);
+            if (!container) return;
+
+            const timeString = data.timestamp ? `${Math.round((Date.now() - data.timestamp) / 60000)} min ago` : 'Just now';
+
+            const card = document.createElement('div');
+            card.className = 'order-card';
+            card.draggable = true;
+            card.id = 'order-' + id;
+
+            let itemsHtml = `<li><span class="qty">1x</span> ${data.food}</li>`;
+            if (data.drinks && data.drinks.length > 0) {
+                data.drinks.forEach(drink => {
+                    itemsHtml += `<span class="item-addon">+ ${drink}</span>`;
+                });
+            }
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="table-badge">TBL ${data.table || '?'}</div>
+                    <div class="time-badge">⏱ ${timeString}</div>
+                </div>
+                <ul class="item-list">
+                    ${itemsHtml}
+                </ul>
+                <div class="card-footer">
+                    <span class="total-price">${data.total}</span>
+                    <button class="action-btn btn-start" onclick="moveCard('${card.id}', 'prep')">Start Prep ➔</button>
+                    <button class="action-btn btn-done" onclick="moveCard('${card.id}', 'ready')">Mark Ready ✓</button>
+                    <button class="action-btn btn-serve" onclick="removeCard('${card.id}')">Archive ✕</button>
+                </div>
+            `;
+
+            container.appendChild(card);
+            if (window.addDragListeners) window.addDragListeners(card);
+            if (window.updateButtons) window.updateButtons(card);
+        }
+    </script>
 
     <script>
         // Update Clock
@@ -459,27 +484,32 @@
         }, 1000);
 
         // --- Drag and Drop Logic ---
-        const cards = document.querySelectorAll('.order-card');
         const containers = document.querySelectorAll('.col-cards');
-
-        cards.forEach(card => {
-            addDragListeners(card);
-        });
 
         containers.forEach(container => {
             container.addEventListener('dragover', e => {
                 e.preventDefault(); // Necessary to allow dropping
                 const draggingCard = document.querySelector('.dragging');
-                container.appendChild(draggingCard);
+                if (draggingCard) {
+                    container.appendChild(draggingCard);
+                }
             });
 
-            // Update counts when drop event fires
+            // Update Firebase when drop event fires
             container.addEventListener('drop', e => {
+                const draggingCard = document.querySelector('.dragging');
+                if (draggingCard) {
+                    const orderId = draggingCard.id.replace('order-', '');
+                    const targetCol = container.getAttribute('data-col');
+                    if (window.firebaseUpdate && window.firebaseRef && window.firebaseDb) {
+                        window.firebaseUpdate(window.firebaseRef(window.firebaseDb, 'orders/' + orderId), { status: targetCol });
+                    }
+                }
                 updateCounts();
             });
         });
 
-        function addDragListeners(card) {
+        window.addDragListeners = function (card) {
             card.addEventListener('dragstart', () => {
                 card.classList.add('dragging');
             });
@@ -492,7 +522,7 @@
             });
         }
 
-        function updateCounts() {
+        window.updateCounts = function () {
             const counts = {
                 'new': document.querySelectorAll('#col-new .order-card').length,
                 'prep': document.querySelectorAll('#col-prep .order-card').length,
@@ -505,24 +535,20 @@
 
         // --- Button Logic ---
         window.moveCard = function (cardId, targetCol) {
-            const card = document.getElementById(cardId);
-            const container = document.querySelector(`.col-cards[data-col="${targetCol}"]`);
-            container.appendChild(card);
-            updateCounts();
-            updateButtons(card);
+            const orderId = cardId.replace('order-', '');
+            if (window.firebaseUpdate && window.firebaseRef && window.firebaseDb) {
+                window.firebaseUpdate(window.firebaseRef(window.firebaseDb, 'orders/' + orderId), { status: targetCol });
+            }
         };
 
         window.removeCard = function (cardId) {
-            const card = document.getElementById(cardId);
-            card.style.transform = 'scale(0)';
-            card.style.opacity = '0';
-            setTimeout(() => {
-                card.remove();
-                updateCounts();
-            }, 300);
+            const orderId = cardId.replace('order-', '');
+            if (window.firebaseRemove && window.firebaseRef && window.firebaseDb) {
+                window.firebaseRemove(window.firebaseRef(window.firebaseDb, 'orders/' + orderId));
+            }
         };
 
-        function updateButtons(card) {
+        window.updateButtons = function (card) {
             // Re-assign button onclicks based on what column it's now in.
             // (Using CSS specificity we already hide/show the correct buttons)
             const parentCol = card.closest('.kanban-col').id;
