@@ -849,6 +849,29 @@
             width: 100%;
         }
 
+        .tracker-close {
+            background: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 0.75rem;
+            font-weight: 800;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.25s;
+        }
+
+        .tracker-close:hover {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .tracker-close.hidden {
+            display: none;
+        }
+
         /* Footer */
         .footer {
             background-color: var(--primary-color);
@@ -1055,7 +1078,10 @@
     <div id="order-tracker" class="order-tracker">
         <div class="tracker-info">
             <span class="tracker-label">Your Order (TBL <span id="tracker-table"></span>)</span>
-            <span class="tracker-status" id="tracker-status">Sent to Kitchen 📋</span>
+            <div style="display: flex; align-items: center;">
+                <span class="tracker-status" id="tracker-status">Sent to Kitchen 📋</span>
+                <button class="tracker-close hidden" id="tracker-close">Got it! ✓</button>
+            </div>
         </div>
         <div class="tracker-progress">
             <div class="progress-bar" id="progress-bar"></div>
@@ -1408,6 +1434,7 @@
 
             window.startTracking = function (orderId, table) {
                 const tracker = document.getElementById('order-tracker');
+                const closeBtn = document.getElementById('tracker-close');
                 document.getElementById('tracker-table').textContent = table;
                 tracker.className = 'order-tracker visible status-new';
 
@@ -1418,8 +1445,15 @@
                         if (data) {
                             tracker.className = `order-tracker visible status-${data.status}`;
                             let statusText = "Sent to Kitchen 📋";
-                            if (data.status === 'prep') statusText = "Cooking... 🍳";
-                            if (data.status === 'ready') statusText = "Ready! 🛎️";
+                            if (closeBtn) closeBtn.classList.add('hidden');
+
+                            if (data.status === 'prep') {
+                                statusText = "Cooking... 🍳";
+                            }
+                            if (data.status === 'ready') {
+                                statusText = "Ready! 🛎️";
+                                if (closeBtn) closeBtn.classList.remove('hidden');
+                            }
                             document.getElementById('tracker-status').textContent = statusText;
                         } else {
                             tracker.classList.remove('visible');
@@ -1429,6 +1463,15 @@
                     });
                 }
             };
+
+            const closeBtnElement = document.getElementById('tracker-close');
+            if (closeBtnElement) {
+                closeBtnElement.addEventListener('click', () => {
+                    document.getElementById('order-tracker').classList.remove('visible');
+                    localStorage.removeItem('activeOrderId');
+                    localStorage.removeItem('activeOrderTable');
+                });
+            }
 
             // Auto-resume tracking if they refresh
             const savedOrderId = localStorage.getItem('activeOrderId');
