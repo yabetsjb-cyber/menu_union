@@ -1077,7 +1077,8 @@
     <!-- Floating Order Tracker -->
     <div id="order-tracker" class="order-tracker">
         <div class="tracker-info">
-            <span class="tracker-label">Your Order (TBL <span id="tracker-table"></span>)</span>
+            <span class="tracker-label">Order <span id="tracker-table"
+                    style="font-weight: 800; color: var(--primary-color);"></span></span>
             <div style="display: flex; align-items: center;">
                 <span class="tracker-status" id="tracker-status">Sent to Kitchen 📋</span>
                 <button class="tracker-close hidden" id="tracker-close">Got it! ✓</button>
@@ -1404,7 +1405,8 @@
                     drinks: drinks,
                     total: total,
                     status: 'new',
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
+                    orderNumber: Math.floor(1000 + Math.random() * 9000).toString()
                 };
 
                 if (window.firebasePush && window.firebaseRef && window.firebaseDb) {
@@ -1443,6 +1445,8 @@
                     window.firebaseOnValue(orderRef, (snapshot) => {
                         const data = snapshot.val();
                         if (data) {
+                            document.getElementById('tracker-table').textContent = `#${data.orderNumber || '?'} - TBL ${table}`;
+
                             tracker.className = `order-tracker visible status-${data.status}`;
                             let statusText = "Sent to Kitchen 📋";
                             if (closeBtn) closeBtn.classList.add('hidden');
