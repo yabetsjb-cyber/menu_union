@@ -543,8 +543,18 @@
             <div id="login-error" class="login-error"></div>
         </div>
     </div>
-
+   
     <script type="module">
+
+        function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+        }
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getDatabase, ref, onChildAdded, onChildChanged, onChildRemoved, update, remove, onValue, set } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
@@ -708,45 +718,45 @@
                 set(ref(dbRef, 'settings/activeToken'), token);
             }
         });
+            function createCard(id, data) {
+    const container = document.querySelector(`.col-cards[data-col="${data.status}"]`);
+    if (!container) return;
 
-        function createCard(id, data) {
-            const container = document.querySelector(`.col-cards[data-col="${data.status}"]`);
-            if (!container) return;
+    const timeString = data.timestamp ? `${Math.round((Date.now() - data.timestamp) / 60000)} min ago` : 'Just now';
 
-            const timeString = data.timestamp ? `${Math.round((Date.now() - data.timestamp) / 60000)} min ago` : 'Just now';
+    const card = document.createElement('div');
+    card.className = 'order-card';
+    card.draggable = true;
+    card.id = 'order-' + id;
 
-            const card = document.createElement('div');
-            card.className = 'order-card';
-            card.draggable = true;
-            card.id = 'order-' + id;
+    let itemsHtml = `<li><span class="qty">1x</span> ${escapeHtml(data.food)}</li>`;
+    if (data.drinks && data.drinks.length > 0) {
+        data.drinks.forEach(drink => {
+            itemsHtml += `<span class="item-addon">+ ${escapeHtml(drink)}</span>`;
+        });
+    }
 
-            let itemsHtml = `<li><span class="qty">1x</span> ${data.food}</li>`;
-            if (data.drinks && data.drinks.length > 0) {
-                data.drinks.forEach(drink => {
-                    itemsHtml += `<span class="item-addon">+ ${drink}</span>`;
-                });
-            }
+    card.innerHTML = `
+        <div class="card-header">
+            <div class="table-badge">#${escapeHtml(data.orderNumber) || '?'} | TBL ${escapeHtml(data.table) || '?'}</div>
+            <div class="time-badge">⏱ ${timeString}</div>
+        </div>
+        <ul class="item-list">
+            ${itemsHtml}
+        </ul>
+        <div class="card-footer">
+            <span class="total-price">${escapeHtml(data.total)}</span>
+            <button class="action-btn btn-start" onclick="moveCard('${card.id}', 'prep')">Start Prep ➔</button>
+            <button class="action-btn btn-done" onclick="moveCard('${card.id}', 'ready')">Mark Ready ✓</button>
+            <button class="action-btn btn-serve" onclick="removeCard('${card.id}')">Archive ✕</button>
+        </div>
+    `;
 
-            card.innerHTML = `
-                <div class="card-header">
-                    <div class="table-badge">#${data.orderNumber || '?'} | TBL ${data.table || '?'}</div>
-                    <div class="time-badge">⏱ ${timeString}</div>
-                </div>
-                <ul class="item-list">
-                    ${itemsHtml}
-                </ul>
-                <div class="card-footer">
-                    <span class="total-price">${data.total}</span>
-                    <button class="action-btn btn-start" onclick="moveCard('${card.id}', 'prep')">Start Prep ➔</button>
-                    <button class="action-btn btn-done" onclick="moveCard('${card.id}', 'ready')">Mark Ready ✓</button>
-                    <button class="action-btn btn-serve" onclick="removeCard('${card.id}')">Archive ✕</button>
-                </div>
-            `;
-
-            container.appendChild(card);
-            if (window.addDragListeners) window.addDragListeners(card);
-            if (window.updateButtons) window.updateButtons(card);
-        }
+    container.appendChild(card);
+    if (window.addDragListeners) window.addDragListeners(card);
+    if (window.updateButtons) window.updateButtons(card);
+}
+        
     </script>
 
     <script>
